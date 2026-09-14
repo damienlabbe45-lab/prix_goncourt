@@ -21,3 +21,7 @@ class CustomAsyncSession(AsyncSession):
     async def scalars(self, statement: Any, *args: Any, **kwargs: Any) -> list[Any]:
         res = await super().scalars(self._text(statement), *args, **kwargs)
         return list(res.all())
+
+    async def exe_tuples(self, statement: Any, *args: Any, **kwargs: Any) -> list[tuple[Any, ...]]:
+        res = await self.execute(statement, *args, **kwargs)
+        return list(res.tuples().all())
