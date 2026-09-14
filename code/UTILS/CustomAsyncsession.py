@@ -17,3 +17,7 @@ class CustomAsyncSession(AsyncSession):
 
     async def scalar(self, statement: Any, *args: Any, **kwargs: Any) -> Any:
         return await super().scalar(self._text(statement), *args, **kwargs)
+
+    async def scalars(self, statement: Any, *args: Any, **kwargs: Any) -> list[Any]:
+        res = await super().scalars(self._text(statement), *args, **kwargs)
+        return list(res.all())
