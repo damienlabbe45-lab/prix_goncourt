@@ -51,3 +51,14 @@ CREATE TABLE LITERARY_PRIZE(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+   -- --------------------------------------------------------
+-- Table `SELECTION`
+-- --------------------------------------------------------
+
+CREATE TABLE SELECTION(
+   prize_id INT NOT NULL,
+   SELECTION_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   selection_number TINYINT NOT NULL,
+   date_selection datetime NOT NULL,
+   CONSTRAINT "fk_person_selection" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
