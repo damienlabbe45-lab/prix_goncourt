@@ -60,5 +60,22 @@ CREATE TABLE SELECTION(
    SELECTION_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    selection_number TINYINT NOT NULL,
    date_selection datetime NOT NULL,
-   CONSTRAINT "fk_person_selection" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
+   CONSTRAINT "fk_prize_selection" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+      -- --------------------------------------------------------
+-- Table `BOOK`
+-- --------------------------------------------------------
+
+CREATE TABLE BOOK(
+   author_id INT NOT NULL,
+   book_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   title VARCHAR(30) NOT NULL,
+   editor VARCHAR(20) NOT NULL,
+   summarize BLOB,
+   release datetime NOT NULL,
+   number_page INT NOT NULL,
+   price DECIMAL(6,2),
+   ISBN VARCHAR(20) NOT NULL UNIQUE,
+   CONSTRAINT "fk_author_book" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
