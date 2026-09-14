@@ -48,3 +48,6 @@ class LogErreur(object):
                     super().emit(record)
                     self.flush()
 
+            class UnbufferedFileHandler(FileHandler):
+                """Handler fichier qui force l'écriture sur le disque à chaque ligne."""
+
