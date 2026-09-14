@@ -11,3 +11,6 @@ class CustomAsyncSession(AsyncSession):
 
     def _text(self, statement: Any) -> Any:
         return text(statement) if isinstance(statement, str) else statement
+
+    async def execute(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
+        return await super().execute(self._text(statement), *args, **kwargs)
