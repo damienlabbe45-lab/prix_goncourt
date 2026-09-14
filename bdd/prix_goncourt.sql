@@ -41,3 +41,11 @@ CREATE TABLE CHARACTER(
    character_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    CONSTRAINT "fk_person_character" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+   -- --------------------------------------------------------
+-- Table `LITERARY_PRIZE`
+-- --------------------------------------------------------
+CREATE TABLE LITERARY_PRIZE(
+   LITERARY_PRIZE_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   LITERARY_PRIZE_name VARCHAR(50) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
