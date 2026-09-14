@@ -54,3 +54,17 @@ class LogErreur(object):
                 def emit(self, record):
                     super().emit(record)
                     self.flush()
+
+# 1. Gestionnaire pour la console (StreamHandler)
+            console_handler = UnbufferedStreamHandler(stdout)
+            console_handler.setLevel(WARNING)
+            console_handler.setFormatter(CUSTOM_FORMETTER)
+            # gestionnaire pour le fichier
+            file_handler = UnbufferedFileHandler(
+                LOG_FILENAME, encoding='utf-8')
+            file_handler.setLevel(WARNING)
+            file_handler.setFormatter(CUSTOM_FORMETTER)
+
+            root_logger.setLevel(DEBUG)
+            root_logger.addHandler(console_handler)
+            root_logger.addHandler(file_handler)
