@@ -91,3 +91,14 @@ CREATE TABLE VOTE(
    CONSTRAINT "fk_selection_vote" FOREIGN KEY (selection_id) REFERENCES SELECTION(selection_id),
    CONSTRAINT "fk_book_vote" FOREIGN KEY (book_id) REFERENCES book(book_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+      -- --------------------------------------------------------
+-- Table `CREATING`
+-- --------------------------------------------------------
+
+CREATE TABLE CREATING(
+   book_id INT NOT NULL,
+   character_id INT NOT NULL,
+   CONSTRAINT "fk_character_creating" FOREIGN KEY (character_id) REFERENCES CHARACTER(character_id),
+   CONSTRAINT "fk_book_creating" FOREIGN KEY (book_id) REFERENCES book(book_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
