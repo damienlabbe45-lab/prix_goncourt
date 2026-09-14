@@ -3,3 +3,5 @@
 *.ini
 *.pyc
 *.lo1
+*.env
+
