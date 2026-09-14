@@ -40,3 +40,6 @@ class LogErreur(object):
             root_logger.removeHandler(handler)
         if not root_logger.handlers:
             from logging import StreamHandler, FileHandler
+
+            class UnbufferedStreamHandler(StreamHandler):
+                """Handler console qui force l'affichage immédiat à chaque ligne."""
