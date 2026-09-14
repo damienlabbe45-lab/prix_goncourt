@@ -18,3 +18,5 @@ class FormatDate(Formatter):
              'July': 'juillet', 'August': 'août', 'September': 'septembre', 'October': 'octobre',
              'November': 'novembre', 'December': 'décembre'}[m])
 
+class LogErreur(object):
+    """Mixin pour initialiser le système de logging (uniquement les erreurs)."""
