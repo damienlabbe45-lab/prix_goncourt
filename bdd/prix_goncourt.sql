@@ -5,8 +5,8 @@ USE `prix_goncourt`;
 -- Table `PERSON`
 -- --------------------------------------------------------
 CREATE TABLE PERSON(
-   person_id INT NOT NULL PRIMARY KEY,
+   person_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    person_name VARCHAR(20) NOT NULL,
    person_lastname VARCHAR(20) NOT NULL,
    biography BLOB
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
