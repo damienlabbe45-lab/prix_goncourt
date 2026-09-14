@@ -19,7 +19,7 @@ CREATE TABLE JURY_MEMBER(
    person_id INT NOT NULL UNIQUE,
    chairman BOOLEAN NOT NULL,
    member_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   CONSTRAINT "fk_person_jury" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
+   CONSTRAINT "fk_person_jury" FOREIGN KEY (person_id) REFERENCES PERSON(person_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
    -- --------------------------------------------------------
@@ -29,7 +29,7 @@ CREATE TABLE JURY_MEMBER(
 CREATE TABLE AUTHOR(
    person_id INT NOT NULL UNIQUE,
    author_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   CONSTRAINT "fk_person_author" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
+   CONSTRAINT "fk_person_author" FOREIGN KEY (person_id) REFERENCES PERSON(person_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
    -- --------------------------------------------------------
@@ -39,30 +39,28 @@ CREATE TABLE AUTHOR(
 CREATE TABLE CHARACTER(
    person_id INT NOT NULL UNIQUE,
    character_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   CONSTRAINT "fk_person_character" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
+   CONSTRAINT "fk_person_character" FOREIGN KEY (person_id) REFERENCES PERSON(person_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+   -- --------------------------------------------------------
+-- Table `SELECTION`
+-- --------------------------------------------------------
+
+CREATE TABLE SELECTION(
+   selection_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   selection_number TINYINT NOT NULL,
+   date_selection datetime NOT NULL
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
    -- --------------------------------------------------------
 -- Table `LITERARY_PRIZE`
 -- --------------------------------------------------------
 CREATE TABLE LITERARY_PRIZE(
    prize_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   prize_name VARCHAR(50) NOT NULL
+   prize_name VARCHAR(50) NOT NULL,
+   selection_id INT NOT NULL,
+   CONSTRAINT "fk_selection_prize" FOREIGN KEY (selection_id) REFERENCES SELECTION(selection_id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-   -- --------------------------------------------------------
--- Table `SELECTION`
--- --------------------------------------------------------
-
-CREATE TABLE SELECTION(
-   prize_id INT NOT NULL,
-   SELECTION_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   selection_number TINYINT NOT NULL,
-   date_selection datetime NOT NULL,
-   CONSTRAINT "fk_prize_selection" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
-   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
       -- --------------------------------------------------------
 -- Table `BOOK`
 -- --------------------------------------------------------
@@ -77,7 +75,7 @@ CREATE TABLE BOOK(
    number_page INT NOT NULL,
    price DECIMAL(6,2),
    ISBN VARCHAR(20) NOT NULL UNIQUE,
-   CONSTRAINT "fk_author_book" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
+   CONSTRAINT "fk_author_book" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
    -- --------------------------------------------------------
@@ -88,8 +86,8 @@ CREATE TABLE VOTE(
    book_id INT,
    selection_id INT,
    number_vote TINYINT NOT NULL,
-   CONSTRAINT "fk_selection_vote" FOREIGN KEY (selection_id) REFERENCES SELECTION(selection_id),
-   CONSTRAINT "fk_book_vote" FOREIGN KEY (book_id) REFERENCES book(book_id)
+   CONSTRAINT "fk_selection_vote" FOREIGN KEY (selection_id) REFERENCES SELECTION(selection_id) ON DELETE CASCADE,
+   CONSTRAINT "fk_book_vote" FOREIGN KEY (book_id) REFERENCES book(book_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
       -- --------------------------------------------------------
@@ -99,8 +97,8 @@ CREATE TABLE VOTE(
 CREATE TABLE CREATING(
    book_id INT NOT NULL,
    character_id INT NOT NULL,
-   CONSTRAINT "fk_character_creating" FOREIGN KEY (character_id) REFERENCES CHARACTER(character_id),
-   CONSTRAINT "fk_book_creating" FOREIGN KEY (book_id) REFERENCES book(book_id)
+   CONSTRAINT "fk_character_creating" FOREIGN KEY (character_id) REFERENCES CHARACTER(character_id) ON DELETE CASCADE,
+   CONSTRAINT "fk_book_creating" FOREIGN KEY (book_id) REFERENCES book(book_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -112,6 +110,6 @@ CREATE TABLE CREATING(
 CREATE TABLE TO_BE_MEMBER_OF(
    member_id INT NOT NULL,
    prize_id INT NOT NULL,
-   CONSTRAINT "fk_prize_to_be_member_of" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id),
-   CONSTRAINT "fk_member_to_be_member_of" FOREIGN KEY (member_id) REFERENCES JURY_MEMBER(member_id)
+   CONSTRAINT "fk_prize_to_be_member_of" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id) ON DELETE CASCADE,
+   CONSTRAINT "fk_member_to_be_member_of" FOREIGN KEY (member_id) REFERENCES JURY_MEMBER(member_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
