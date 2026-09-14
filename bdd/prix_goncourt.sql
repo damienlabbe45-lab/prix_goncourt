@@ -102,3 +102,16 @@ CREATE TABLE CREATING(
    CONSTRAINT "fk_character_creating" FOREIGN KEY (character_id) REFERENCES CHARACTER(character_id),
    CONSTRAINT "fk_book_creating" FOREIGN KEY (book_id) REFERENCES book(book_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+      -- --------------------------------------------------------
+-- Table `TO_BE_MEMBER_OF`
+-- --------------------------------------------------------
+
+CREATE TABLE TO_BE_MEMBER_OF(
+   member_id INT NOT NULL,
+   prize_id INT NOT NULL,
+   CONSTRAINT "fk_prize_to_be_member_of" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id),
+   CONSTRAINT "fk_member_to_be_member_of" FOREIGN KEY (member_id) REFERENCES JURY_MEMBER(member_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
