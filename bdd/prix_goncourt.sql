@@ -21,3 +21,13 @@ CREATE TABLE JURY_MEMBER(
    member_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    CONSTRAINT "fk_person_jury" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+   -- --------------------------------------------------------
+-- Table `AUTHOR`
+-- --------------------------------------------------------
+
+CREATE TABLE AUTHOR(
+   person_id INT NOT NULL UNIQUE,
+   author_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   CONSTRAINT "fk_person_author" FOREIGN KEY (person_id) REFERENCES PERSON(person_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
