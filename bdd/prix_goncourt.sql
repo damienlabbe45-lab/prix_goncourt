@@ -79,3 +79,15 @@ CREATE TABLE BOOK(
    ISBN VARCHAR(20) NOT NULL UNIQUE,
    CONSTRAINT "fk_author_book" FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id)
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+   -- --------------------------------------------------------
+-- Table `VOTE`
+-- --------------------------------------------------------
+
+CREATE TABLE VOTE(
+   book_id INT,
+   selection_id INT,
+   number_vote TINYINT NOT NULL,
+   CONSTRAINT "fk_selection_vote" FOREIGN KEY (selection_id) REFERENCES SELECTION(selection_id),
+   CONSTRAINT "fk_book_vote" FOREIGN KEY (book_id) REFERENCES book(book_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
