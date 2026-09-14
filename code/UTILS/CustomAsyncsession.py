@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any
+from typing import Any, override
 from sqlalchemy import text
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,12 +12,15 @@ class CustomAsyncSession(AsyncSession):
     def _text(self, statement: Any) -> Any:
         return text(statement) if isinstance(statement, str) else statement
 
+    @override(AsyncSession)
     async def execute(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
         return await super().execute(self._text(statement), *args, **kwargs)
 
+    @override(AsyncSession)
     async def scalar(self, statement: Any, *args: Any, **kwargs: Any) -> Any:
         return await super().scalar(self._text(statement), *args, **kwargs)
 
+    @override(AsyncSession)
     async def scalars(self, statement: Any, *args: Any, **kwargs: Any) -> list[Any]:
         res = await super().scalars(self._text(statement), *args, **kwargs)
         return list(res.all())
