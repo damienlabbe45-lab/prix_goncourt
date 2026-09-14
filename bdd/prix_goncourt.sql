@@ -47,7 +47,7 @@ CREATE TABLE CHARACTER(
 -- --------------------------------------------------------
 CREATE TABLE LITERARY_PRIZE(
    prize_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   LITERARY_PRIZE_name VARCHAR(50) NOT NULL
+   prize_name VARCHAR(50) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
