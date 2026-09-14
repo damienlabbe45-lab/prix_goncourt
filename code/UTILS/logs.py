@@ -51,3 +51,6 @@ class LogErreur(object):
             class UnbufferedFileHandler(FileHandler):
                 """Handler fichier qui force l'écriture sur le disque à chaque ligne."""
 
+                def emit(self, record):
+                    super().emit(record)
+                    self.flush()
