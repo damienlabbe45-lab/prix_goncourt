@@ -30,7 +30,7 @@ class LogErreur(object):
         from pathlib import Path
         stdout.reconfigure(line_buffering=True)  # type: ignore[union-attr]
         sys.stderr.reconfigure(line_buffering=True)  # type: ignore[union-attr]
-        LOG_FILENAME = Path(__file__).resolve().parents[1] / 'log_bot.log'
+        LOG_FILENAME = Path(__file__).resolve().parents[1] / 'log_goncourt.log'
         # Utilisation du Formateur
         CUSTOM_FORMETTER = FormatDate(
             fmt='%(asctime)s | %(levelname)s | %(name)s | %(message)s')
