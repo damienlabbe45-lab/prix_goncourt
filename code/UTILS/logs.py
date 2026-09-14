@@ -43,3 +43,8 @@ class LogErreur(object):
 
             class UnbufferedStreamHandler(StreamHandler):
                 """Handler console qui force l'affichage immédiat à chaque ligne."""
+
+                def emit(self, record):
+                    super().emit(record)
+                    self.flush()
+
