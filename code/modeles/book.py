@@ -6,14 +6,13 @@ Classe book
 
 from dataclasses import dataclass, field
 from typing import override
-from abc import ABC
 from datetime import date
 from author import Author
 from character import Character
 
 
 @dataclass
-class Book(ABC):
+class Book:
     """livre avec son auteur,
     ses persos principaux,
     son résumé,
@@ -34,7 +33,7 @@ class Book(ABC):
     author_book: Author
     list_main_character: list[Character] = field(default_factory=list)
 
-    @override(ABC)
+    @override
     def __str__(self) -> str:
         return f"""le livre {self.title} édité par l'édition {self.editor} écrit par {self.author_book} paru le 
 {self.release_book}. Il a comme numéro ISBN: {self.ISBN} et fait {self.number_page} pages. Ses personnages principaux 
