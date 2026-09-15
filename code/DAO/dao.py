@@ -7,7 +7,7 @@ Classe abstraite générique Dao[T], dont hérite les classes de DAO de chaque e
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import Optional
-from UTILS.CustomAsyncsession import CustomAsyncSession
+from UTILS.customasyncsession import CustomAsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import URL
