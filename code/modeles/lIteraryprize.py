@@ -6,17 +6,16 @@ Classe LiteraryPrize
 
 from dataclasses import dataclass, field
 from typing import override
-from abc import ABC
 from jurymember import JuryMember
 
 
 @dataclass
-class LiteraryPrize(ABC):
+class LiteraryPrize:
     """nom d'un prix littéraire avec sa liste des membres du jury"""
     name_prize: str
     list_JuryMember: list[JuryMember] = field(default_factory=list)
 
-    @override(ABC)
+    @override
     def __str__(self) -> str:
         return f"{self.name_prize}" + "- \n".join(map(str, self.list_JuryMember))
 
