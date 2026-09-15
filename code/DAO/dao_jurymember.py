@@ -33,7 +33,7 @@ class JuryMemberDao(Dao[JuryMember]):
         """Renvoit l'ensemble des personnages principaux de la BD."""
         author_list: list[JuryMember] = []
         async with self.connection() as session:
-            for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
-                           ).fetchall():
+            for record in (await session.execute("""SELECT perso_name, person_lastname, biography, chairman FROM person 
+            JOIN JURY_MEMBER ON person.person_id = JURY_MEMBER.person_id """)).fetchall():
                 author_list.append(self.jury_from_db(record))
         return author_list
