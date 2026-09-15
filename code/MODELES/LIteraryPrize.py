@@ -16,4 +16,6 @@ class LiteraryPrize(ABC):
     name_prize: str
     list_JuryMember: list[JuryMember]
 
-
+    @override(ABC)
+    def __str__(self) -> str:
+        return f"{self.name_prize}" + "- \n".join(map(str, self.list_JuryMember))
