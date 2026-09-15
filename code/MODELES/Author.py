@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Classe Student, fille de la classe Person
+Classe Author, fille de la classe Person
 """
 
 from dataclasses import dataclass
