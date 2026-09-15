@@ -14,4 +14,8 @@ from dao.dao_jurymember import JuryMemberDao
 @dataclass
 class LiteraryPrizeDao(Dao[LiteraryPrize]):
 
+    @staticmethod
+    def prize_from_db(record: str) -> LiteraryPrize:
+        """Construit un prix littéraire du modèle d'après son entité en BD"""
+        return LiteraryPrize(record)
 
