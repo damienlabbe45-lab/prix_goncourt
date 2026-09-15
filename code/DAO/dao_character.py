@@ -19,5 +19,14 @@ class CharacterDao(Dao[Character]):
 
         return character
 
+    async def read(self, id_entity: int) -> Optional[Character]:
+        """Renvoit le personnage correspondant à l'entité dont l'id est id_entity
+           (ou None s'il n'a pu être trouvé)"""
+        async with self.connection() as session:
+            record = (await session.execute("""SELECT perso_name, person_lastname, biography FROM person WHERE 
+                person_id = (select person_id from CHARACTER_BOOK where character_id = :c)""",
+                                            {"c": id_entity})).fetchone()
+            return self.character_from_db(record) if record is not None else None
+
 
 
