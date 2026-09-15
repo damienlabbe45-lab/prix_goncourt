@@ -20,3 +20,10 @@ class Selection(ABC):
     selection: int
     dic_book_vote: dict[Book, int] = field(default_factory=dict)
 
+    @override(ABC)
+    def __str__(self) -> str:
+        list_results: list[str] = [str(key) + f": {values} votes" for key, values in self.dic_book_vote.items()]
+        return f""" la sélection numéro {self.selection} du prix littéraire {self.name_prize} a lieu le 
+{self.date_selection}. voici les résultats du vote: {"- \n".join(list_results)}"""
+
+
