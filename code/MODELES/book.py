@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from typing import override
 from abc import ABC
 from datetime import date
-from Author import Author
-from Character import Character
+from author import Author
+from character import Character
 
 
 @dataclass

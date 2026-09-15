@@ -7,7 +7,7 @@ Classe LiteraryPrize
 from dataclasses import dataclass
 from typing import override
 from abc import ABC
-from JuryMember import JuryMember
+from jurymember import JuryMember
 
 
 @dataclass
