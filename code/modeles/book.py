@@ -4,7 +4,7 @@
 Classe book
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import override
 from abc import ABC
 from datetime import date
@@ -32,7 +32,7 @@ class Book(ABC):
     summarize: str
     release_book: date
     author_book: Author
-    list_main_character: list[Character]
+    list_main_character: list[Character] = field(default_factory=list)
 
     @override(ABC)
     def __str__(self) -> str:
