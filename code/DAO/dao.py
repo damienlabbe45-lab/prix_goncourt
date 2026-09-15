@@ -29,4 +29,10 @@ class Dao[T](ABC, LogErreur):
         expire_on_commit=False,
         class_=CustomAsyncSession)
 
+    @abstractmethod
+    def read(self, id_entity: int) -> Optional[T]:
+        """Renvoit l'objet correspondant à l'entité dont l'id est id_entity
+           (ou None s'il n'a pu être trouvé)"""
+        ...
+
 
