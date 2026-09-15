@@ -19,3 +19,8 @@ class LiteraryPrize(ABC):
     @override(ABC)
     def __str__(self) -> str:
         return f"{self.name_prize}" + "- \n".join(map(str, self.list_JuryMember))
+
+    def add_list_jurymember(self, jury: JuryMember) -> None:
+        self.list_JuryMember.append(jury)
+
+
