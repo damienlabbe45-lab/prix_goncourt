@@ -13,7 +13,7 @@ from dao.dao import Dao
 @dataclass
 class CharacterDao(Dao[Character]):
     @staticmethod
-    def character_from_db(record) -> Character:
+    def character_from_db(record: tuple[str, str, str]) -> Character:
         """Construit un personnage du modèle d'après son entité en BD"""
         return Character(record[0], record[1], record[2])
 
