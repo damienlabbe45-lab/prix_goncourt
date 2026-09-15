@@ -20,7 +20,7 @@ class AuthorDao(Dao[Author]):
 
     @override(Dao)
     async def read(self, id_entity: int) -> Optional[Author]:
-        """Renvoit le personnage correspondant à l'entité dont l'id est id_entity
+        """Renvoit l'auteur' correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         async with self.connection() as session:
             record = (await session.execute("""SELECT perso_name, person_lastname, biography FROM person WHERE 
@@ -30,7 +30,7 @@ class AuthorDao(Dao[Author]):
 
     @override(Dao)
     async def read_all(self) -> list[Author]:
-        """Renvoit l'ensemble des personnages principaux de la BD."""
+        """Renvoit l'ensemble des auteurs de la BD."""
         author_list: list[Author] = []
         async with self.connection() as session:
             for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
