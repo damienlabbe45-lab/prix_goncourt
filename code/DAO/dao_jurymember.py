@@ -15,12 +15,12 @@ class JuryMemberDao(Dao[JuryMember]):
 
     @staticmethod
     def jury_from_db(record: tuple[str, str, str, bool]) -> JuryMember:
-        """Construit un auteur du modèle d'après son entité en BD"""
+        """Construit un membre du jury du modèle d'après son entité en BD"""
         return JuryMember(record[0], record[1], record[2], record[3])
 
     @override(Dao)
     async def read(self, id_entity: int) -> Optional[JuryMember]:
-        """Renvoit le personnage correspondant à l'entité dont l'id est id_entity
+        """Renvoit le membre du jury correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         async with self.connection() as session:
             record = (await session.execute("""SELECT perso_name, person_lastname, biography, chairman FROM person 
@@ -30,7 +30,7 @@ class JuryMemberDao(Dao[JuryMember]):
 
     @override(Dao)
     async def read_all(self) -> list[JuryMember]:
-        """Renvoit l'ensemble des personnages principaux de la BD."""
+        """Renvoit l'ensemble des membres des jurys de la BD."""
         author_list: list[JuryMember] = []
         async with self.connection() as session:
             for record in (await session.execute("""SELECT perso_name, person_lastname, biography, chairman FROM person 
