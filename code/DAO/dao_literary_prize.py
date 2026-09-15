@@ -38,7 +38,7 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
     @override(Dao)
     async def read_all(self) -> list[LiteraryPrize]:
         """Renvoit l'ensemble des prix littéraires de la BD."""
-        author_list: list[LiteraryPrize] = []
+        prize_list: list[LiteraryPrize] = []
         async with self.connection() as session:
             for record in await session.scalars("""SELECT prize_name FROM LITERARY_PRIZE"""):
                 prize = self.prize_from_db(record)
@@ -46,5 +46,5 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
                     await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id = (SELECT prize_id 
                     FROM LITERARY_PRIZE WHERE prize_name =:c)""", {"c": prize.name_prize})):
                     prize.add_list_jurymember(jurys)
-                author_list.append(prize)
-        return author_list
+                prize_list.append(prize)
+        return prize_list
