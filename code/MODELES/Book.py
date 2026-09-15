@@ -33,3 +33,11 @@ class Book(ABC):
     release_book: date
     author_book: Author
     list_main_character: list[Character]
+
+    @override(ABC)
+    def __str__(self) -> str:
+        return f"""le livre {self.title} édité par l'édition {self.editor} écrit par {self.author_book} paru le 
+{self.release_book}. Il a comme numéro ISBN: {self.ISBN} et fait {self.number_page} pages. Ses personnages principaux 
+sont {"- \n".join(map(str, self.list_main_character))}. voici son résumé: \n {self.summarize}. son prix est de 
+{self.price}"""
+
