@@ -23,4 +23,5 @@ class LiteraryPrize(ABC):
     def add_list_jurymember(self, jury: JuryMember) -> None:
         self.list_JuryMember.append(jury)
 
-
+    def remove_list_jurymember(self, jury: JuryMember) -> None:
+        self.list_JuryMember.remove(jury)
