@@ -41,8 +41,8 @@ class Book(ABC):
 sont {"- \n".join(map(str, self.list_main_character))}. voici son résumé: \n {self.summarize}. son prix est de 
 {self.price}"""
 
-    def add_list_chacracterr(self, jury: Character) -> None:
+    def add_list_character(self, jury: Character) -> None:
         self.list_main_character.append(jury)
 
-    def remove_list_jurymember(self, jury: Character) -> None:
+    def remove_list_character(self, jury: Character) -> None:
         self.list_main_character.remove(jury)
