@@ -28,5 +28,12 @@ class CharacterDao(Dao[Character]):
                                             {"c": id_entity})).fetchone()
             return self.character_from_db(record) if record is not None else None
 
-
+    async def read_all(self) -> list[Character]:
+        """Renvoit l'ensemble des personnages principaux de la BD."""
+        character_list: list[Character] = []
+        async with self.connection() as session:
+            for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
+                           ).fetchall():
+                character_list.append(self.character_from_db(record))
+        return character_list
 
