@@ -21,3 +21,20 @@ class BookDao(Dao[Book]):
         """Construit un livre du modèle d'après son entité en BD"""
         return Book(record[0], record[1], record[2], record[3], record[4], record[5], record[6], author)
 
+    @override(Dao)
+    async def read(self, id_entity: int) -> Optional[Book]:
+        """Renvoit le livre correspondant à l'entité dont l'id est id_entity
+           (ou None s'il n'a pu être trouvé)"""
+        async with self.connection() as session:
+            record = await session.scalar("""SELECT author_id FROM BOOK where book_id""", {"c": id_entity})
+            if record is None:
+                return record
+            author = AuthorDao.read(self.connection, id_entity=record)
+            book = self.character_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
+            , summarize, release_book FROM BOOK WHERE book_id = :c""", {"c": id_entity}), author)
+            for charact in await session.scalars("""SELECT character_id FROM CREATING where book_id = :c""",
+                                                 {"c": id_entity}):
+                book.add_list_character(CharacterDao.read(self.connection, charact))
+
+            return book
+
