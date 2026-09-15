@@ -36,4 +36,3 @@ class CharacterDao(Dao[Character]):
                            ).fetchall():
                 character_list.append(self.character_from_db(record))
         return character_list
-
