@@ -1,10 +1,11 @@
 from logging import Formatter
-from typing import Self
+from typing import Self, override
 
 
 class FormatDate(Formatter):
     """Formateur personnalisé pour utiliser la fonction date() pour l'horodatage."""
 
+    @override(Formatter)
     def formatTime(self: Self, record, datefmt=None):
         """
         Retourne la chaîne de date/heure personnalisée.
@@ -30,9 +31,9 @@ class LogErreur(object):
         from pathlib import Path
         stdout.reconfigure(line_buffering=True)  # type: ignore[union-attr]
         sys.stderr.reconfigure(line_buffering=True)  # type: ignore[union-attr]
-        LOG_FILENAME = Path(__file__).resolve().parents[1] / 'log_goncourt.log'
+        log_filename = Path(__file__).resolve().parents[1] / 'log_goncourt.log'
         # Utilisation du Formateur
-        CUSTOM_FORMETTER = FormatDate(
+        custom_formetter = FormatDate(
             fmt='%(asctime)s | %(levelname)s | %(name)s | %(message)s')
         root_logger = getLogger()
         # Vérifie si la configuration n'a pas déjà été faite
@@ -44,6 +45,7 @@ class LogErreur(object):
             class UnbufferedStreamHandler(StreamHandler):
                 """Handler console qui force l'affichage immédiat à chaque ligne."""
 
+                @override(StreamHandler)
                 def emit(self, record):
                     super().emit(record)
                     self.flush()
@@ -51,6 +53,7 @@ class LogErreur(object):
             class UnbufferedFileHandler(FileHandler):
                 """Handler fichier qui force l'écriture sur le disque à chaque ligne."""
 
+                @override(FileHandler)
                 def emit(self, record):
                     super().emit(record)
                     self.flush()
@@ -58,12 +61,12 @@ class LogErreur(object):
 # 1. Gestionnaire pour la console (StreamHandler)
             console_handler = UnbufferedStreamHandler(stdout)
             console_handler.setLevel(WARNING)
-            console_handler.setFormatter(CUSTOM_FORMETTER)
+            console_handler.setFormatter(custom_formetter)
             # gestionnaire pour le fichier
             file_handler = UnbufferedFileHandler(
-                LOG_FILENAME, encoding='utf-8')
+                log_filename, encoding='utf-8')
             file_handler.setLevel(WARNING)
-            file_handler.setFormatter(CUSTOM_FORMETTER)
+            file_handler.setFormatter(custom_formetter)
 
             root_logger.setLevel(DEBUG)
             root_logger.addHandler(console_handler)
