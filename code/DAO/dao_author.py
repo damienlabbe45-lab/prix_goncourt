@@ -27,3 +27,13 @@ class AuthorDao(Dao[Author]):
                 person_id = (select person_id from AUTHOR where author_id = :c)""",
                                             {"c": id_entity})).fetchone()
             return self.author_from_db(record) if record is not None else None
+
+    @override(Dao)
+    async def read_all(self) -> list[Author]:
+        """Renvoit l'ensemble des personnages principaux de la BD."""
+        author_list: list[Author] = []
+        async with self.connection() as session:
+            for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
+                           ).fetchall():
+                author_list.append(self.author_from_db(record))
+        return author_list
