@@ -26,11 +26,11 @@ class BookDao(Dao[Book]):
         """Renvoit le livre correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         async with self.connection() as session:
-            record = await session.scalar("""SELECT author_id FROM BOOK where book_id""", {"c": id_entity})
+            record = await session.scalar("""SELECT author_id FROM BOOK where book_id = :c""", {"c": id_entity})
             if record is None:
                 return record
             author = AuthorDao.read(self.connection, id_entity=record)
-            book = self.character_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
+            book = self.book_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
             , summarize, release_book FROM BOOK WHERE book_id = :c""", {"c": id_entity}), author)
             for charact in await session.scalars("""SELECT character_id FROM CREATING where book_id = :c""",
                                                  {"c": id_entity}):
@@ -45,7 +45,7 @@ class BookDao(Dao[Book]):
         async with self.connection() as session:
             for author_id in await session.scalars("""SELECT author_id FROM BOOK where book_id"""):
                 author = AuthorDao.read(self.connection, id_entity=author_id)
-                book = self.character_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
+                book = self.book_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
                             , summarize, release_book FROM BOOK WHERE author_id = :c """, {"c": author_id}), author)
                 for charact in await session.scalars("""SELECT character_id FROM CREATING where book_id = (
                 SELECT book_id FROM BOOK WHERE author_id = :c )""", {"c": author_id}):
