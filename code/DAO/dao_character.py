@@ -14,10 +14,8 @@ from dao.dao import Dao
 class CharacterDao(Dao[Character]):
     @staticmethod
     def character_from_db(record) -> Character:
-        """Construit un cours du modèle d'après son entité en BD"""
-        character: Character = Character(record[0], record[1], record[2])
-
-        return character
+        """Construit un personnage du modèle d'après son entité en BD"""
+        return Character(record[0], record[1], record[2])
 
     @override(Dao)
     async def read(self, id_entity: int) -> Optional[Character]:
