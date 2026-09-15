@@ -18,12 +18,13 @@ class Selection(ABC):
     date_selection: date
     name_prize: LiteraryPrize
     selection: int
-    dic_book_vote: dict[Book, int] = field(default_factory=dict)
+    dic_book_vote: dict[str, int] = field(default_factory=dict)
 
     @override(ABC)
     def __str__(self) -> str:
-        list_results: list[str] = [str(key) + f": {values} votes" for key, values in self.dic_book_vote.items()]
+        list_results: list[str] = [f"{key}: {values} votes" for key, values in self.dic_book_vote.items()]
         return f""" la sélection numéro {self.selection} du prix littéraire {self.name_prize} a lieu le 
 {self.date_selection}. voici les résultats du vote: {"- \n".join(list_results)}"""
 
-
+    def add_dict_character(self, jury: Book, vote: int) -> None:
+        self.dic_book_vote[str(jury)] = vote
