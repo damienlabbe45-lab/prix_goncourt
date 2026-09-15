@@ -16,4 +16,8 @@ from dao.dao_character import CharacterDao
 
 @dataclass
 class BookDao(Dao[Book]):
+    @staticmethod
+    def book_from_db(record: tuple[str, str, int, float, str, str, date], author: Author) -> Book:
+        """Construit un livre du modèle d'après son entité en BD"""
+        return Book(record[0], record[1], record[2], record[3], record[4], record[5], record[6], author)
 
