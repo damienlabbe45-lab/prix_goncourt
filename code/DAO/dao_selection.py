@@ -35,7 +35,7 @@ class SelectionDao(Dao[Selection]):
             SELECTION WHERE selection_id = :c""", {"c": id_entity}), prize)
 
             for book in await session.scalars("""SELECT book_id FROM VOTE WHERE selection_id = :c""",
-                                                 {"c": id_entity}):
+                                              {"c": id_entity}):
                 books = BookDao.read(self.connection, id_entity=book)
 
                 select.add_dict_character(books, await session.scalar("""SELECT 
@@ -51,3 +51,11 @@ class SelectionDao(Dao[Selection]):
             for select in await session.scalars("""SELECT selection_id FROM SELECTION"""):
                 book_list.append(self.read(select))
         return book_list
+
+    async def insert_by_member(self, books: list[int], votes: list[int], selection: int) -> None:
+        async with self.connection() as session, await session.begin():
+            await session.execute("""UPDATE VOTE SET number_vote = :v WHERE book_id = :b AND selection_id = :s""",
+                                  {"b": books, "s": selection, "v": votes})
+            if len(books) > 4:
+                await session.execute("""INSERT INTO VOTE (book_id, selection_id, number_vote) 
+                SELECT book_id , :s + 1, -23 FROM VOTE WHERE number_vote > 0 AND SELECTION_id = :s""", {"s": selection})
