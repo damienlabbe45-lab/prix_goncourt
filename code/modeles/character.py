@@ -5,7 +5,7 @@ Classe Character, fille de la classe Person
 """
 
 from dataclasses import dataclass
-from person import Person
+from modeles.person import Person
 
 
 @dataclass
