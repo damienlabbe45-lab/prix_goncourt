@@ -10,11 +10,7 @@ Application des prix littéraires
 
 async def main() -> None:
     """Programme principal."""
-    try:
-        await insert_data()
-    except Exception as err:
-        print(err)
-
+    await insert_data()
 
 if __name__ == '__main__':
     run(main())
