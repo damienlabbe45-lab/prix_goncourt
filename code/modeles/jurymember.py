@@ -5,7 +5,7 @@ Classe JuryMember, fille de la classe Person
 """
 
 from dataclasses import dataclass
-from person import Person
+from modeles.person import Person
 from typing import override
 
 
@@ -16,6 +16,6 @@ class JuryMember(Person):
     """
     chairman: bool
 
-    @override(Person)
+    @override
     def __str__(self):
         return f" {"président  d' un " if self.chairman else ""} membre du jury {super().__str__()}"
