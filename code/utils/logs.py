@@ -5,7 +5,7 @@ from typing import Self, override
 class FormatDate(Formatter):
     """Formateur personnalisé pour utiliser la fonction date() pour l'horodatage."""
 
-    @override(Formatter)
+    @override
     def formatTime(self: Self, record, datefmt=None):
         """
         Retourne la chaîne de date/heure personnalisée.
@@ -45,7 +45,7 @@ class LogErreur(object):
             class UnbufferedStreamHandler(StreamHandler):
                 """Handler console qui force l'affichage immédiat à chaque ligne."""
 
-                @override(StreamHandler)
+                @override
                 def emit(self, record):
                     super().emit(record)
                     self.flush()
@@ -53,7 +53,7 @@ class LogErreur(object):
             class UnbufferedFileHandler(FileHandler):
                 """Handler fichier qui force l'écriture sur le disque à chaque ligne."""
 
-                @override(FileHandler)
+                @override
                 def emit(self, record):
                     super().emit(record)
                     self.flush()

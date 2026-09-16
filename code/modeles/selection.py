@@ -7,8 +7,8 @@ Classe Selection
 from dataclasses import dataclass, field
 from typing import override
 from datetime import date
-from lIteraryprize import LiteraryPrize
-from book import Book
+from modeles.literaryprize import LiteraryPrize
+from modeles.book import Book
 
 
 @dataclass
