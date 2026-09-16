@@ -20,6 +20,6 @@ async def gather_exceptions(*coros: Awaitable[Any]) -> list[Any]:
     return manage_exception(await gather(*coros, return_exceptions=True))
 
 
-async def execute_insert(query: str, params: list[dict] | dict) -> None:
+async def execute_insert(query: str, params: list[dict] | dict | None = None) -> None:
     async with SelectionDao.connection() as session, session.begin():
         await session.execute(query, params)
