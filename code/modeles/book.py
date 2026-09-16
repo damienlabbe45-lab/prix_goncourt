@@ -7,8 +7,8 @@ Classe book
 from dataclasses import dataclass, field
 from typing import override
 from datetime import date
-from author import Author
-from character import Character
+from modeles.author import Author
+from modeles.character import Character
 
 
 @dataclass
