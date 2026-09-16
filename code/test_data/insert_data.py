@@ -1,17 +1,14 @@
-from utils.gather_and_exception import gather_exceptions
-from dao.dao_selection import SelectionDao
+from utils.utils import gather_exceptions, execute_insert
 from datetime import date
 
 
 async def insert_data() -> None:
-    connection = SelectionDao.connection
     person_name = ["Yann", "Ace", "Corren", "Byleth", "Daraen", "Corrin", "Sephiroth", "Lucina", "Grima", "Lefantôme",
                    "Jaden"]
     person_last_name = ["Zerfhu", "Ropignon", "Casper", "Sothis", "Veilleur", "Vallah", "Angel", "Yllisse", "Medeus",
                         "Ebball", "Flamel"]
     jury = [10, 3, 4, 5, 6, 7]
     chairman = [True, False, False, False, False, False]
-    character = list(range(1, 12))
     selection_num = [1, 2, 3]
     selection_date = [date(2026, 9, 2), date(2026, 10, 6), date(2026, 10, 27)]
     prize = "Prix littéraire Goncourt"
@@ -32,37 +29,42 @@ async def insert_data() -> None:
             "975-3-540-6910-6", "975-3-540-5910-6", "975-3-540-4910-6", "975-3-40-3910-6", "975-3-540-2910-6",
             "975-3-540-1910-6", "975-3-540-9910-6"]
     id_books = list(range(1, 17))
+    await gather_exceptions(execute_insert("""INSERT INTO PERSON(person_name, person_lastname) 
+                                                VALUES (:pn, :pl)""",
+                                                       [{"pn": name, "pl": last_name}
+                                                        for name, last_name in zip(person_name, person_last_name)
+                                                        ]),
 
-    async with connection() as session, await session.begin():
-        await gather_exceptions(session.execute("""INSERT IGNORE INTO PERSON(person_name, person_lastname) 
-                                                VALUES (:pn, :pl)""", {"pn": person_name, "pl": person_last_name}),
+                                    execute_insert("""INSERT INTO SELECTION(selection_number, date_selection)
+                                VALUES(:sn, :sd)""", [{"sn": num, "sd": dt}
+                                                      for num, dt in zip(selection_num, selection_date)
+                                                      ]))
 
-                                session.execute("""INSERT IGNORE INTO SELECTION(selection_number, date_selection)
-                                VALUES(:sn, :sd)""", {"sn": selection_num, "sd": selection_date}))
+    await gather_exceptions(execute_insert("""INSERT INTO AUTHOR (person_id) VALUES (:p)""",
+                                                       [{"p": character} for character in range(1, 12)]),
 
-        await gather_exceptions(session.execute("""INSERT IGNORE INTO AUTHOR (perso_id) VALUES (:p)""",
-                                                {"p": character}),
+                                    execute_insert("""INSERT INTO CHARACTER_BOOK (person_id) VALUES (:p)""",
+                                                           [{"p": character} for character in range(1, 12)]),
 
-                                session.execute("""INSERT IGNORE INTO CHARACTER_BOOK (perso_id) VALUES (:p)""",
-                                                {"p": character}),
+                                    execute_insert("""INSERT INTO JURY_MEMBER (person_id, chairman) 
+                                VALUES (:j, :c)""", [{"j": jur, "c": chairma} for jur, chairma in zip(jury, chairman)]),
 
-                                session.execute("""INSERT IGNORE INTO JURY_MEMBER (perso_id, chairman) 
-                                VALUES (:j, :c)""", {"j": jury, "c": chairman}),
+                                    execute_insert("""INSERT INTO LITERARY_PRIZE(prize_name, selection_id)
+                                VALUES(:pri,:sn )""", [{"sn": selection, "pri": prize} for selection in selection_num]))
 
-                                session.execute("""INSERT IGNORE INTO LITERARY_PRIZE(prize_name, selection_id)
-                                VALUES(:sn, :pri)""", {"sn": selection_num, "pri": prize}))
+    await gather_exceptions(execute_insert("""INSERT INTO TO_BE_MEMBER_OF(member_id, prize_id)
+                                                VALUES (:j, 1)""", [{"j": jur} for jur in range(1, 7)]),
 
-        await gather_exceptions(session.execute("""INSERT IGNORE INTO TO_BE_MEMBER_OF(member_id, prize_id)
-                                                VALUES (:j, :pri""", {"j": jury, "pri": prize}),
-
-                                session.execute("""INSERT IGNORE INTO BOOK(
-                                title, editor, ISBN, price, number_page, release_book, author) 
+                                    execute_insert("""INSERT INTO BOOK(
+                                title, editor, ISBN, price, number_page, release_book, author_id) 
                                 VALUES(:t, :e, :i, :price, :n, :dr, :au)""",
-                                {"t": title, "e": editor, "i": isbn, "price": price, "n": number_page, "au": author,
-                                 "dr": date_release}))
+                                                           [{"t": titl, "e": editor, "i": isb, "price": price,
+                                                             "n": number_pag, "au": autho, "dr": date_release}
+                                                            for titl, isb, number_pag, autho in
+                                                            zip(title, isbn, number_page, author)]))
 
-        await gather_exceptions(session.execute("""INSERT IGNORE INTO CREATING(book_id, character_id)
-        VALUES(:b, :au)""", {"b": id_books, "au": author}),
+    await gather_exceptions(execute_insert("""INSERT INTO CREATING(book_id, character_id)
+            VALUES(:b, :au)""", [{"b": id_book, "au": autho} for id_book, autho in zip(id_books, author)]),
 
-                                session.execute("""INSERT IGNORE INTO VOTE(book_id, selection_id)
-                                SELECT :b, 1, -23""", {"b": id_books}))
+                                   execute_insert("""INSERT INTO VOTE(book_id, selection_id, number_vote)
+                                SELECT :b, 1, -23""", [{"b": id_book} for id_book in id_books]))
