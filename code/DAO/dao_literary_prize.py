@@ -6,7 +6,7 @@ Classe Dao[LiteraryPrize]
 
 from dataclasses import dataclass
 from typing import Optional, override
-from modeles.lIteraryprize import LiteraryPrize
+from modeles.literaryprize import LiteraryPrize
 from dao.dao import Dao
 from dao.dao_jurymember import JuryMemberDao
 
@@ -19,7 +19,7 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
         """Construit un prix littéraire du modèle d'après son entité en BD"""
         return LiteraryPrize(record)
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[LiteraryPrize]:
         """Renvoit le prix littéraire correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -35,7 +35,7 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
                 prize.add_list_jurymember(jurys)
             return prize
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[LiteraryPrize]:
         """Renvoit l'ensemble des prix littéraires de la BD."""
         prize_list: list[LiteraryPrize] = []

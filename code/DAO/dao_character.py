@@ -17,7 +17,7 @@ class CharacterDao(Dao[Character]):
         """Construit un personnage du modèle d'après son entité en BD"""
         return Character(record[0], record[1], record[2])
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[Character]:
         """Renvoit le personnage correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -27,7 +27,7 @@ class CharacterDao(Dao[Character]):
                                             {"c": id_entity})).fetchone()
             return self.character_from_db(record) if record is not None else None
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[Character]:
         """Renvoit l'ensemble des personnages principaux de la BD."""
         character_list: list[Character] = []

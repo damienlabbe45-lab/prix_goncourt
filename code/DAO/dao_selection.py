@@ -11,7 +11,7 @@ from modeles.selection import Selection
 from dao.dao import Dao
 from dao.dao_literary_prize import LiteraryPrizeDao
 from dao.dao_book import BookDao
-from modeles.lIteraryprize import LiteraryPrize
+from modeles.literaryprize import LiteraryPrize
 
 
 @dataclass
@@ -21,7 +21,7 @@ class SelectionDao(Dao[Selection]):
         """Construit une selection du modèle d'après son entité en BD"""
         return Selection(record[0], prize, record[1])
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[Selection]:
         """Renvoit la sélection correspondante à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -43,7 +43,7 @@ class SelectionDao(Dao[Selection]):
 
             return book
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[Selection]:
         """Renvoit l'ensemble des sélections de la BD."""
         book_list: list[Selection] = []

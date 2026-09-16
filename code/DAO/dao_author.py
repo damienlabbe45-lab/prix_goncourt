@@ -18,7 +18,7 @@ class AuthorDao(Dao[Author]):
         """Construit un auteur du modèle d'après son entité en BD"""
         return Author(record[0], record[1], record[2])
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[Author]:
         """Renvoit l'auteur' correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -28,7 +28,7 @@ class AuthorDao(Dao[Author]):
                                             {"c": id_entity})).fetchone()
             return self.author_from_db(record) if record is not None else None
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[Author]:
         """Renvoit l'ensemble des auteurs de la BD."""
         author_list: list[Author] = []

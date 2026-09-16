@@ -20,12 +20,12 @@ from utils.logs import LogErreur
 class Dao[T](ABC, LogErreur):
     load_dotenv()
     connection: sessionmaker[CustomAsyncSession] = sessionmaker(
-        bind=create_async_engine(URL.create(drivername="mysql+asyncmy://",
+        bind=create_async_engine(URL.create(drivername="mysql+asyncmy",
                                             username=environ["USER"],
                                             password=environ["PASSWORD"],
                                             host=environ["IP"],
                                             database=environ["DATABASE"]),
-                                 echo=False, poll_pre_ping=True),
+                                 echo=False),
         expire_on_commit=False,
         class_=CustomAsyncSession)
 

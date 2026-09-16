@@ -21,7 +21,7 @@ class BookDao(Dao[Book]):
         """Construit un livre du modèle d'après son entité en BD"""
         return Book(record[0], record[1], record[2], record[3], record[4], record[5], record[6], author)
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[Book]:
         """Renvoit le livre correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -38,7 +38,7 @@ class BookDao(Dao[Book]):
 
             return book
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[Book]:
         """Renvoit l'ensemble des livres de la BD."""
         book_list: list[Book] = []

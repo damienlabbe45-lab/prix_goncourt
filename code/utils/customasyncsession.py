@@ -12,15 +12,15 @@ class CustomAsyncSession(AsyncSession):
     def _text(self, statement: Any) -> Any:
         return text(statement) if isinstance(statement, str) else statement
 
-    @override(AsyncSession)
+    @override
     async def execute(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
         return await super().execute(self._text(statement), *args, **kwargs)
 
-    @override(AsyncSession)
+    @override
     async def scalar(self, statement: Any, *args: Any, **kwargs: Any) -> Any:
         return await super().scalar(self._text(statement), *args, **kwargs)
 
-    @override(AsyncSession)
+    @override
     async def scalars(self, statement: Any, *args: Any, **kwargs: Any) -> list[Any]:
         res = await super().scalars(self._text(statement), *args, **kwargs)
         return list(res.all())
@@ -32,3 +32,7 @@ class CustomAsyncSession(AsyncSession):
     async def mappings(self, statement: Any, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
         res = await self.execute(statement, *args, **kwargs)
         return [dict(row) for row in res.mappings()]
+
+    async def execute_insert(self, query: str, params: list[dict] | dict) -> None:
+        async with self.begin():
+            await self.execute(query, params)

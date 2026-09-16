@@ -18,7 +18,7 @@ class JuryMemberDao(Dao[JuryMember]):
         """Construit un membre du jury du modèle d'après son entité en BD"""
         return JuryMember(record[0], record[1], record[2], record[3])
 
-    @override(Dao)
+    @override
     async def read(self, id_entity: int) -> Optional[JuryMember]:
         """Renvoit le membre du jury correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
@@ -28,7 +28,7 @@ class JuryMemberDao(Dao[JuryMember]):
                       ).fetchone()
             return self.jury_from_db(record) if record is not None else None
 
-    @override(Dao)
+    @override
     async def read_all(self) -> list[JuryMember]:
         """Renvoit l'ensemble des membres des jurys de la BD."""
         author_list: list[JuryMember] = []
