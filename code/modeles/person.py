@@ -16,7 +16,7 @@ class Person(ABC):
     last_name: str
     biography: str | None
 
-    @override(ABC)
+    @override
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name} " + \
                (f", {self.biography}" if self.biography is not None else '')
