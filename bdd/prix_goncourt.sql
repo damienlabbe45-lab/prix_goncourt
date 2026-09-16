@@ -1,6 +1,13 @@
-DROP DATABASE IF EXISTS `prix_goncourt`;
-CREATE DATABASE `prix_goncourt` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `prix_goncourt`;
+DROP TABLE IF EXISTS `TO_BE_MEMBER_OF`;
+DROP TABLE IF EXISTS `CREATING`;
+DROP TABLE IF EXISTS `VOTE`;
+DROP TABLE IF EXISTS `BOOK`;
+DROP TABLE IF EXISTS `LITERARY_PRIZE`;
+DROP TABLE IF EXISTS `CHARACTER_BOOK`;
+DROP TABLE IF EXISTS `AUTHOR`;
+DROP TABLE IF EXISTS `JURY_MEMBER`;
+DROP TABLE IF EXISTS `SELECTION`;
+DROP TABLE IF EXISTS `PERSON`;
 -- --------------------------------------------------------
 -- Table `PERSON`
 -- --------------------------------------------------------
@@ -68,7 +75,7 @@ CREATE TABLE prix_goncourt.LITERARY_PRIZE(
 CREATE TABLE prix_goncourt.BOOK(
    author_id INT NOT NULL,
    book_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   title VARCHAR(30) NOT NULL,
+   title VARCHAR(200) NOT NULL,
    editor VARCHAR(20) NOT NULL,
    summarize BLOB,
    release_book datetime NOT NULL,
