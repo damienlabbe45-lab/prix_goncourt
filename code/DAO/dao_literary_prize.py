@@ -29,10 +29,9 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
             if record is None:
                 return record
             prize = self.prize_from_db(record)
-            for jurys in JuryMemberDao.read(
-                    await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id =:c""",
-                                          {"c": id_entity})):
-                prize.add_list_jurymember(jurys)
+            for jurys in await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id =:c""",
+                                               {"c": id_entity}):
+                prize.add_list_jurymember(JuryMemberDao.read(jurys))
             return prize
 
     @override
@@ -42,9 +41,8 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
         async with self.connection() as session:
             for record in await session.scalars("""SELECT prize_name FROM LITERARY_PRIZE"""):
                 prize = self.prize_from_db(record)
-                for jurys in JuryMemberDao.read(
-                    await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id = (SELECT prize_id 
-                    FROM LITERARY_PRIZE WHERE prize_name =:c)""", {"c": prize.name_prize})):
-                    prize.add_list_jurymember(jurys)
+                for jurys in await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id = (
+                SELECT prize_id FROM LITERARY_PRIZE WHERE prize_name =:c)""", {"c": prize.name_prize}):
+                    prize.add_list_jurymember(JuryMemberDao.read(jurys))
                 prize_list.append(prize)
         return prize_list
