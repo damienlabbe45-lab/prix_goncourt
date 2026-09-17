@@ -21,6 +21,7 @@ class CharmanJuryInterface(VisitorInterface):
         return books[response], response
 
     async def vote_book(self, select: int) -> None:
+        """sélection des votes pour les livres ainsi que convertissement des livres en tant qu'identifiant du livre"""
         book_selection = await self.selection_book(select)
         number = len(book_selection)
         counter = len(await JuryMemberDao().read_all())
