@@ -10,9 +10,8 @@ class CharmanJuryInterface(VisitorInterface):
     comme il n'y a pas le temps, on supposera qu'on est déja connecté en tant que ça"""
     async def selection_book_jury(self, select: int, id_book: list[int]) -> tuple[str, int]:
         """sélection par le président du livre (à défaut d'avoir une interface web ou une interface graphique)"""
-        read_selection_dao = await SelectionDao().read(select)
         counter = 0
-        books = list(read_selection_dao.dic_book_vote.keys())
+        books = await self.selection_book(select)
         for book in books:
             if book not in id_book:
                 print(f"pour voter le livre {book} , taper {counter}")
@@ -48,5 +47,5 @@ class CharmanJuryInterface(VisitorInterface):
             await self.selection_charman(select_initial, select + 1)
 
     async def selection_charman_initial(self) -> None:
-        selection_id = await SelectionDao().selection_id_prize("Prix littéraire Goncour")
+        selection_id = await SelectionDao().selection_id_prize("Prix littéraire Goncourt")
         await self.selection_charman(selection_id, selection_id)
