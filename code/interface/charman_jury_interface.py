@@ -17,7 +17,7 @@ class CharmanJuryInterface(VisitorInterface):
         response = input_selection(counter, id_book)
         return books[response], response
 
-    async def vote_book(self, select: int):
+    async def vote_book(self, select: int) -> None:
         book_selection = await self.selection_book(select)
         number = len(book_selection)
         counter = len(await JuryMemberDao().read_all())
@@ -37,3 +37,9 @@ class CharmanJuryInterface(VisitorInterface):
                 isbn = search(r"Son numéro isbc est: ([\d-]+)", book_selection[i]).group(1)
                 params.append({"b": isbn_id[isbn], "v": 0, "s": select})
         await selection_dao.insert_by_member(params, select)
+
+    async def selection_charman(self, select_initial: int, select: int) -> None:
+        await self.vote_book(select)
+        if select + 2 == select_initial:
+            await self.selection_charman(select_initial, select + 1)
+
