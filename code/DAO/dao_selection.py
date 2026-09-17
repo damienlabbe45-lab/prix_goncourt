@@ -30,18 +30,19 @@ class SelectionDao(Dao[Selection]):
                                           {"c": id_entity})
             if record is None:
                 return record
-            prize = LiteraryPrizeDao.read(self.connection, id_entity=record)
-            select = self.selection_from_db(await session.execute("""SELECT date_selection, selection_number FROM 
-            SELECTION WHERE selection_id = :c""", {"c": id_entity}), prize)
+            prize = await LiteraryPrizeDao().read(id_entity=record)
+            record = await session.execute_fetchone("""SELECT date_selection, selection_number FROM 
+            SELECTION WHERE selection_id = :c""", {"c": id_entity})
+            select = self.selection_from_db(record, prize)
 
             for book in await session.scalars("""SELECT book_id FROM VOTE WHERE selection_id = :c""",
                                               {"c": id_entity}):
-                books = BookDao.read(self.connection, id_entity=book)
+                books = await BookDao().read(id_entity=book)
 
                 select.add_dict_character(books, await session.scalar("""SELECT 
                 number_vote FROM VOTE WHERE book_id = :b AND selection_id = :c""", {"b": book, "c": id_entity}))
 
-            return book
+            return select
 
     @override
     async def read_all(self) -> list[Selection]:
@@ -62,10 +63,10 @@ class SelectionDao(Dao[Selection]):
 
     async def mapping_isbn_book_id(self, selection: int) -> dict[str, int]:
         async with self.connection() as session:
-            return await session.mappings("""SELECT ISBN, book_id FROM BOOK JOIN VOTE ON VOTE.book_id = BOOK.book_id 
+            return await session.mappings("""SELECT ISBN,VOTE.book_id FROM BOOK JOIN VOTE ON VOTE.book_id = BOOK.book_id 
             WHERE selection_id = :s""", {"s": selection})
 
     async def selection_id_prize(self, prize_name: str) -> int:
         async with self.connection() as session:
-            return session.scalar("""SELECT selection_id FROM VOTE JOIN LITERARY_PRIZE ON 
+            return await session.scalar("""SELECT max(VOTE.selection_id) FROM VOTE JOIN LITERARY_PRIZE ON 
             VOTE.selection_id = LITERARY_PRIZE.selection_id WHERE prize_name = :pn""", {"pn": prize_name})

@@ -29,12 +29,12 @@ class BookDao(Dao[Book]):
             record = await session.scalar("""SELECT author_id FROM BOOK where book_id = :c""", {"c": id_entity})
             if record is None:
                 return record
-            author = AuthorDao.read(self.connection, id_entity=record)
-            book = self.book_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
+            author = await AuthorDao().read(id_entity=record)
+            book = self.book_from_db(await session.execute_fetchone("""SELECT title, editor, number_page, price, ISBN
             , summarize, release_book FROM BOOK WHERE book_id = :c""", {"c": id_entity}), author)
             for charact in await session.scalars("""SELECT character_id FROM CREATING where book_id = :c""",
                                                  {"c": id_entity}):
-                book.add_list_character(CharacterDao.read(self.connection, charact))
+                book.add_list_character(await CharacterDao().read(charact))
 
             return book
 
@@ -44,11 +44,11 @@ class BookDao(Dao[Book]):
         book_list: list[Book] = []
         async with self.connection() as session:
             for author_id in await session.scalars("""SELECT author_id FROM BOOK where book_id"""):
-                author = AuthorDao.read(self.connection, id_entity=author_id)
-                book = self.book_from_db(await session.execute("""SELECT title, editor, number_page, price, ISBN
-                            , summarize, release_book FROM BOOK WHERE author_id = :c """, {"c": author_id}), author)
+                author = await AuthorDao().read(self.connection, id_entity=author_id)
+                book = self.book_from_db(await session.execute_fetchone("""SELECT title, editor, number_page, price, 
+                ISBN , summarize, release_book FROM BOOK WHERE author_id = :c """, {"c": author_id}), author)
                 for charact in await session.scalars("""SELECT character_id FROM CREATING where book_id = (
                 SELECT book_id FROM BOOK WHERE author_id = :c )""", {"c": author_id}):
-                    book.add_list_character(CharacterDao.read(self.connection, charact))
+                    book.add_list_character(await CharacterDao().read(charact))
                 book_list.append(book)
         return book_list

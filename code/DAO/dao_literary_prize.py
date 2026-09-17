@@ -31,7 +31,7 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
             prize = self.prize_from_db(record)
             for jurys in await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id =:c""",
                                                {"c": id_entity}):
-                prize.add_list_jurymember(JuryMemberDao.read(jurys))
+                prize.add_list_jurymember(await JuryMemberDao().read(jurys))
             return prize
 
     @override
@@ -43,6 +43,6 @@ class LiteraryPrizeDao(Dao[LiteraryPrize]):
                 prize = self.prize_from_db(record)
                 for jurys in await session.scalars("""SELECT member_id FROM TO_BE_MEMBER_OF where prize_id = (
                 SELECT prize_id FROM LITERARY_PRIZE WHERE prize_name =:c)""", {"c": prize.name_prize}):
-                    prize.add_list_jurymember(JuryMemberDao.read(jurys))
+                    prize.add_list_jurymember(await JuryMemberDao().read(jurys))
                 prize_list.append(prize)
         return prize_list
