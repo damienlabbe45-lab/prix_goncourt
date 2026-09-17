@@ -23,9 +23,8 @@ class AuthorDao(Dao[Author]):
         """Renvoit l'auteur' correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         async with self.connection() as session:
-            record = (await session.execute("""SELECT perso_name, person_lastname, biography FROM person WHERE 
-                person_id = (select person_id from AUTHOR where author_id = :c)""",
-                                            {"c": id_entity})).fetchone()
+            record = await session.execute_fetchone("""SELECT person_name, person_lastname, biography FROM person WHERE 
+                person_id = (select person_id from AUTHOR where author_id = :c)""", {"c": id_entity})
             return self.author_from_db(record) if record is not None else None
 
     @override
@@ -33,7 +32,7 @@ class AuthorDao(Dao[Author]):
         """Renvoit l'ensemble des auteurs de la BD."""
         author_list: list[Author] = []
         async with self.connection() as session:
-            for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
-                           ).fetchall():
+            for record in await session.execute_fetchall("""SELECT person_name, person_lastname, biography FROM 
+            person """):
                 author_list.append(self.author_from_db(record))
         return author_list

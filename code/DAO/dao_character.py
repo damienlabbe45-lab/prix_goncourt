@@ -22,9 +22,8 @@ class CharacterDao(Dao[Character]):
         """Renvoit le personnage correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         async with self.connection() as session:
-            record = (await session.execute("""SELECT perso_name, person_lastname, biography FROM person WHERE 
-                person_id = (select person_id from CHARACTER_BOOK where character_id = :c)""",
-                                            {"c": id_entity})).fetchone()
+            record = await session.execute_fetchone("""SELECT person_name, person_lastname, biography FROM person WHERE 
+                person_id = (select person_id from CHARACTER_BOOK where character_id = :c)""", {"c": id_entity})
             return self.character_from_db(record) if record is not None else None
 
     @override
@@ -32,7 +31,7 @@ class CharacterDao(Dao[Character]):
         """Renvoit l'ensemble des personnages principaux de la BD."""
         character_list: list[Character] = []
         async with self.connection() as session:
-            for record in (await session.execute("""SELECT perso_name, person_lastname, biography FROM person """)
-                           ).fetchall():
+            for record in await session.execute_fetchall("""SELECT person_name, person_lastname, biography FROM person
+            """):
                 character_list.append(self.character_from_db(record))
         return character_list
