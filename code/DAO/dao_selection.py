@@ -58,9 +58,14 @@ class SelectionDao(Dao[Selection]):
                                   params)
             if len(params) > 4:
                 await session.execute("""INSERT INTO VOTE (book_id, selection_id, number_vote) 
-                SELECT book_id , :s + 1, -23 FROM VOTE WHERE number_vote > 0 AND SELECTION_id = :s""", {"s": selection})
+                SELECT book_id , :s + 1, -23 FROM VOTE WHERE number_vote > 0 AND selection_id = :s""", {"s": selection})
 
     async def mapping_isbn_book_id(self, selection: int) -> dict[str, int]:
         async with self.connection() as session:
             return await session.mappings("""SELECT ISBN, book_id FROM BOOK JOIN VOTE ON VOTE.book_id = BOOK.book_id 
             WHERE selection_id = :s""", {"s": selection})
+
+    async def selection_id_prize(self, prize_name: str) -> int:
+        async with self.connection() as session:
+            return session.scalar("""SELECT selection_id FROM VOTE JOIN LITERARY_PRIZE ON 
+            VOTE.selection_id = LITERARY_PRIZE.selection_id WHERE prize_name = :pn""", {"pn": prize_name})
