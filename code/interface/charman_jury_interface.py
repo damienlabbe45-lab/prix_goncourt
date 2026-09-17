@@ -18,26 +18,22 @@ class CharmanJuryInterface(VisitorInterface):
         return books[response], response
 
     async def vote_book(self, select: int):
-        number = int(len(await self.selection_book(select)) / 2)
+        book_selection = await self.selection_book(select)
+        number = len(book_selection)
         counter = len(await JuryMemberDao().read_all())
-        book = []
-        vote = []
         list_id_book = []
-        for _ in range(number):
-            result = await self.selection_book_jury(select, list_id_book)
-            book.append(result[0])
-            list_id_book.append(result[1])
-            vote.append(input_selection(counter))
-
-        for _ in range(number):
-            vote.append(0)
-
         params = []
-        number = 0
         selection_dao = SelectionDao()
         isbn_id = await selection_dao.mapping_isbn_book_id(select)
-        while len(params) < len(book):
-            books = book[number]
-            isbn = search(r"Son numéro isbc est: ([\d-]+)", books).group(1)
-            params.append({"b": isbn_id[isbn], "v": vote[number], "s": select})
+        for _ in range(int(number/2)):
+            results = await self.selection_book_jury(select, list_id_book)
+            result = results[0]
+            isbn = search(r"Son numéro isbc est: ([\d-]+)", result).group(1)
+            params.append({"b": isbn_id[isbn], "v": input_selection(counter), "s": select})
+            list_id_book.append(results[1])
+
+        for i in range(number):
+            if i not in list_id_book:
+                isbn = search(r"Son numéro isbc est: ([\d-]+)", book_selection[i]).group(1)
+                params.append({"b": isbn_id[isbn], "v": 0, "s": select})
         await selection_dao.insert_by_member(params, select)
