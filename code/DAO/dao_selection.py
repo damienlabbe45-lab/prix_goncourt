@@ -52,10 +52,11 @@ class SelectionDao(Dao[Selection]):
                 book_list.append(self.read(select))
         return book_list
 
-    async def insert_by_member(self, books: list[int], votes: list[int], selection: int) -> None:
+    async def insert_by_member(self, params: list[dict[str, str | int]], selection: int) -> None:
         async with self.connection() as session, await session.begin():
             await session.execute("""UPDATE VOTE SET number_vote = :v WHERE book_id = :b AND selection_id = :s""",
-                                  {"b": books, "s": selection, "v": votes})
-            if len(books) > 4:
+                                  params)
+            if len(params) > 4:
                 await session.execute("""INSERT INTO VOTE (book_id, selection_id, number_vote) 
                 SELECT book_id , :s + 1, -23 FROM VOTE WHERE number_vote > 0 AND SELECTION_id = :s""", {"s": selection})
+
