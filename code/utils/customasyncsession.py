@@ -29,9 +29,12 @@ class CustomAsyncSession(AsyncSession):
         res = await self.execute(statement, *args, **kwargs)
         return list(res.tuples().all())
 
-    async def mappings(self, statement: Any, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
+    async def mappings(self, statement: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         res = await self.execute(statement, *args, **kwargs)
-        return [dict(row) for row in res.mappings()]
+        dictionary = {}
+        for row in res.mappings():
+            dictionary[row[0]] = row[1]
+        return dictionary
 
     async def execute_insert(self, query: str, params: list[dict] | dict) -> None:
         async with self.begin():
