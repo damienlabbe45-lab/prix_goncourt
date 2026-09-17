@@ -60,3 +60,7 @@ class SelectionDao(Dao[Selection]):
                 await session.execute("""INSERT INTO VOTE (book_id, selection_id, number_vote) 
                 SELECT book_id , :s + 1, -23 FROM VOTE WHERE number_vote > 0 AND SELECTION_id = :s""", {"s": selection})
 
+    async def mapping_isbn_book_id(self, selection: int) -> dict[str, int]:
+        async with self.connection() as session:
+            return await session.mappings("""SELECT ISBN, book_id FROM BOOK JOIN VOTE ON VOTE.book_id = BOOK.book_id 
+            WHERE selection_id = :s""", {"s": selection})
