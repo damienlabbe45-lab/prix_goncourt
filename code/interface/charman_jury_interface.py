@@ -9,6 +9,7 @@ class CharmanJuryInterface(VisitorInterface):
     """classe qu'on est censé accéder si on est connecté en tant que l'un des présidents des membres du jury
     comme il n'y a pas le temps, on supposera qu'on est déja connecté en tant que ça"""
     async def selection_book_jury(self, select: int, id_book: list[int]) -> tuple[str, int]:
+        """sélection par le président du livre (à défaut d'avoir une interface web ou une interface graphique)"""
         read_selection_dao = await SelectionDao().read(select)
         counter = 0
         books = list(read_selection_dao.dic_book_vote.keys())
