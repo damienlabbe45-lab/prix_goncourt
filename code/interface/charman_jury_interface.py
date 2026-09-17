@@ -43,3 +43,6 @@ class CharmanJuryInterface(VisitorInterface):
         if select + 2 == select_initial:
             await self.selection_charman(select_initial, select + 1)
 
+    async def selection_charman_initial(self):
+        selection_id = await SelectionDao().selection_id_prize("Prix littéraire Goncour")
+        await self.selection_charman(selection_id, selection_id)
