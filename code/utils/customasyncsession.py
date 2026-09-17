@@ -35,3 +35,11 @@ class CustomAsyncSession(AsyncSession):
         for row in res:
             dictionary[row[0]] = row[1]
         return dictionary
+
+    async def execute_fetchall(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
+        res = await self.execute(statement, *args, **kwargs)
+        return res.fetchall()
+
+    async def execute_fetchone(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
+        res = await self.execute(statement, *args, **kwargs)
+        return res.fetchone()
