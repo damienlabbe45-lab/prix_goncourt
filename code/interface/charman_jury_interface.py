@@ -6,6 +6,8 @@ from re import search
 
 
 class CharmanJuryInterface(VisitorInterface):
+    """classe qu'on est censé accéder si on est connecté en tant que l'un des présidents des membres du jury
+    comme il y a pas le temps, on supposera qu'on est déja connecté en temps que ça"""
     async def selection_book_jury(self, select: int, id_book: list[int]) -> tuple[str, int]:
         read_selection_dao = await SelectionDao().read(select)
         counter = 0
