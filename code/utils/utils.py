@@ -23,3 +23,14 @@ async def gather_exceptions(*coros: Awaitable[Any]) -> list[Any]:
 async def execute_insert(query: str, params: list[dict] | dict | None = None) -> None:
     async with SelectionDao.connection() as session, session.begin():
         await session.execute(query, params)
+
+
+def input_selection(counter: int, id_book: list[int] = []) -> int:
+    response = input()
+    if response.isdigit():
+        response = int(response)
+    while response not in range(counter) and response not in id_book:
+        response = input()
+        if response.isdigit():
+            response = int(response)
+    return response
