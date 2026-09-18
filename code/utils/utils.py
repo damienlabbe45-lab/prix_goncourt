@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 from collections.abc import Awaitable
 from asyncio import gather
 from dao.dao_selection import SelectionDao
@@ -26,11 +26,12 @@ async def execute_insert(query: str, params: list[dict] | dict | None = None) ->
 
 
 def input_selection(counter: int, id_book: list[int] = []) -> int:
+    elements = [number for number in range(counter) if number not in id_book]
     response = input()
     if response.isdigit():
         response = int(response)
-    while response not in range(counter) and response not in id_book:
+    while response not in elements:
         response = input()
         if response.isdigit():
             response = int(response)
-    return response
+    return cast(int, response)
