@@ -1,11 +1,11 @@
-from interface.visitor_interface import VisitorInterface
+from interface.jury_member_interface import JuryMemberInterface
 from dao.dao_selection import SelectionDao
 from utils.utils import input_selection
 from dao.dao_jurymember import JuryMemberDao
 from re import search
 
 
-class CharmanJuryInterface(VisitorInterface):
+class CharmanJuryInterface(JuryMemberInterface):
     """classe qu'on est censé accéder si on est connecté en tant que l'un des présidents des membres du jury
     comme il n'y a pas le temps, on supposera qu'on est déja connecté en tant que ça"""
     async def selection_book_jury(self, select: int, id_book: list[int]) -> tuple[str, int]:
