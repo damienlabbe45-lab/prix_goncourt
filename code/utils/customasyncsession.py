@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, override
+from typing import Any, override, Sequence
 from sqlalchemy import text
-from sqlalchemy.engine import Result
+from sqlalchemy.engine import Result, Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -36,10 +36,10 @@ class CustomAsyncSession(AsyncSession):
             dictionary[row[0]] = row[1]
         return dictionary
 
-    async def execute_fetchall(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
+    async def execute_fetchall(self, statement: Any, *args: Any, **kwargs: Any) -> Sequence[Row[Any]]:
         res = await self.execute(statement, *args, **kwargs)
         return res.fetchall()
 
-    async def execute_fetchone(self, statement: Any, *args: Any, **kwargs: Any) -> Result[Any]:
+    async def execute_fetchone(self, statement: Any, *args: Any, **kwargs: Any) -> Row[Any] | None:
         res = await self.execute(statement, *args, **kwargs)
         return res.fetchone()
