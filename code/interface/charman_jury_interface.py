@@ -14,7 +14,7 @@ class CharmanJuryInterface(VisitorInterface):
         books = await self.selection_book(select)
         for book in books:
             if book not in id_book:
-                print(f"pour voter le livre {book} , taper {counter}")
+                print(f"pour voter {book} , taper {counter} \n \n")
             counter += 1
         response = input_selection(counter, id_book)
         return books[response], response
@@ -31,19 +31,26 @@ class CharmanJuryInterface(VisitorInterface):
         for _ in range(int(number/2)):
             results = await self.selection_book_jury(select, list_id_book)
             result = results[0]
-            isbn = search(r"Son numéro isbc est: ([\d-]+)", result).group(1)
+            isbn_result = search(r"Il a comme numéro ISBN: ([\d-]+)", result)
+            if isbn_result is None:
+                raise AssertionError
+            isbn: str = isbn_result.group(1)
+            print(f"veillez indiquer combien de vote a eu {result}")
             params.append({"b": isbn_id[isbn], "v": input_selection(counter), "s": select})
             list_id_book.append(results[1])
 
         for i in range(number):
             if i not in list_id_book:
-                isbn = search(r"Son numéro isbc est: ([\d-]+)", book_selection[i]).group(1)
+                isbn_result = search(r"Il a comme numéro ISBN: ([\d-]+)", book_selection[i])
+                if isbn_result is None:
+                    raise AssertionError
+                isbn: str = isbn_result.group(1)
                 params.append({"b": isbn_id[isbn], "v": 0, "s": select})
         await selection_dao.insert_by_member(params, select)
 
     async def selection_charman(self, select_initial: int, select: int) -> None:
         await self.vote_book(select)
-        if select + 2 == select_initial:
+        if select_initial + 2 != select:
             await self.selection_charman(select_initial, select + 1)
 
     async def selection_charman_initial(self) -> None:
