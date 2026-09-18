@@ -22,8 +22,9 @@ class Selection:
     @override
     def __str__(self) -> str:
         list_results: list[str] = [f"{key}: {values} votes" for key, values in self.dic_book_vote.items()]
-        return f""" la sélection numéro {self.selection} du prix littéraire {self.name_prize} a lieu le 
-{self.date_selection}. voici les résultats du vote: {"- \n".join(list_results)}"""
+        message = f"la sélection numéro {self.selection} du prix littéraire {self.name_prize} a lieu"
+        message = message + f" le {self.date_selection}. voici les résultats du vote: {"- \n".join(list_results)}"
+        return message
 
     def add_dict_character(self, jury: Book, vote: int) -> None:
         self.dic_book_vote[str(jury)] = vote
