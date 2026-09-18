@@ -54,7 +54,7 @@ class SelectionDao(Dao[Selection]):
         return book_list
 
     async def insert_by_member(self, params: list[dict[str, str | int]], selection: int) -> None:
-        async with self.connection() as session, await session.begin():
+        async with self.connection() as session, session.begin():
             await session.execute("""UPDATE VOTE SET number_vote = :v WHERE book_id = :b AND selection_id = :s""",
                                   params)
             if len(params) > 4:
