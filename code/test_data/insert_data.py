@@ -31,40 +31,42 @@ async def insert_data() -> None:
     id_books = list(range(1, 17))
     await gather_exceptions(execute_insert("""INSERT INTO PERSON(person_name, person_lastname) 
                                                 VALUES (:pn, :pl)""",
-                                                       [{"pn": name, "pl": last_name}
-                                                        for name, last_name in zip(person_name, person_last_name)
-                                                        ]),
+                                           [{"pn": name, "pl": last_name}
+                                            for name, last_name in zip(person_name, person_last_name)
+                                            ]),
 
-                                    execute_insert("""INSERT INTO SELECTION(selection_number, date_selection)
+                            execute_insert("""INSERT INTO SELECTION(selection_number, date_selection)
                                 VALUES(:sn, :sd)""", [{"sn": num, "sd": dt}
                                                       for num, dt in zip(selection_num, selection_date)
                                                       ]))
 
     await gather_exceptions(execute_insert("""INSERT INTO AUTHOR (person_id) VALUES (:p)""",
-                                                       [{"p": character} for character in range(1, 12)]),
+                                           [{"p": character} for character in range(1, 12)]),
 
-                                    execute_insert("""INSERT INTO CHARACTER_BOOK (person_id) VALUES (:p)""",
-                                                           [{"p": character} for character in range(1, 12)]),
+                            execute_insert("""INSERT INTO CHARACTER_BOOK (person_id) VALUES (:p)""",
+                                           [{"p": character} for character in range(1, 12)]),
 
-                                    execute_insert("""INSERT INTO JURY_MEMBER (person_id, chairman) 
-                                VALUES (:j, :c)""", [{"j": jur, "c": chairma} for jur, chairma in zip(jury, chairman)]),
+                            execute_insert("""INSERT INTO JURY_MEMBER (person_id, chairman) 
+                                VALUES (:j, :c)""", [{"j": jur} for jur in zip(jury, )]),
 
-                                    execute_insert("""INSERT INTO LITERARY_PRIZE(prize_name, selection_id)
+                            execute_insert("""INSERT INTO LITERARY_PRIZE(prize_name, selection_id)
                                 VALUES(:pri,:sn )""", [{"sn": selection, "pri": prize} for selection in selection_num]))
 
     await gather_exceptions(execute_insert("""INSERT INTO TO_BE_MEMBER_OF(member_id, prize_id)
-                                                VALUES (:j, 1)""", [{"j": jur} for jur in range(1, 7)]),
+                                                VALUES (:j, 1)""",
+                                           [{"j": jur, "c": chairma} for jur, chairma in
+                                            zip(range(1, 7), chairman)]),
 
-                                    execute_insert("""INSERT INTO BOOK(
+                            execute_insert("""INSERT INTO BOOK(
                                 title, editor, ISBN, price, number_page, release_book, author_id) 
                                 VALUES(:t, :e, :i, :price, :n, :dr, :au)""",
-                                                           [{"t": titl, "e": editor, "i": isb, "price": price,
-                                                             "n": number_pag, "au": autho, "dr": date_release}
-                                                            for titl, isb, number_pag, autho in
-                                                            zip(title, isbn, number_page, author)]))
+                                           [{"t": titl, "e": editor, "i": isb, "price": price,
+                                             "n": number_pag, "au": autho, "dr": date_release}
+                                            for titl, isb, number_pag, autho in
+                                            zip(title, isbn, number_page, author)]))
 
     await gather_exceptions(execute_insert("""INSERT INTO CREATING(book_id, character_id)
             VALUES(:b, :au)""", [{"b": id_book, "au": autho} for id_book, autho in zip(id_books, author)]),
 
-                                   execute_insert("""INSERT INTO VOTE(book_id, selection_id, number_vote)
+                            execute_insert("""INSERT INTO VOTE(book_id, selection_id, number_vote)
                                 SELECT :b, 1, -23""", [{"b": id_book} for id_book in id_books]))
