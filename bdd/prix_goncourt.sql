@@ -1,7 +1,5 @@
 DROP TABLE IF EXISTS `TO_BE_MEMBER_OF`;
 DROP TABLE IF EXISTS `CREATING`;
-DROP TABLE IF EXISTS `EDITE`;
-DROP TABLE IF EXISTS `EDITOR`;
 DROP TABLE IF EXISTS `VOTE`;
 DROP TABLE IF EXISTS `BOOK`;
 DROP TABLE IF EXISTS `LITERARY_PRIZE`;
@@ -84,31 +82,13 @@ CREATE TABLE prix_goncourt.BOOK(
    author_id INT NOT NULL,
    book_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    title VARCHAR(200) NOT NULL,
+   editor VARCHAR(20) NOT NULL,
    summarize BLOB,
    release_book date NOT NULL,
    number_page INT NOT NULL,
    price DECIMAL(6,2),
    ISBN VARCHAR(20) NOT NULL UNIQUE,
    CONSTRAINT fk_author_book FOREIGN KEY (author_id) REFERENCES AUTHOR(author_id) ON DELETE CASCADE
-   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-     -- --------------------------------------------------------
--- Table `EDITOR`
--- --------------------------------------------------------
-
-CREATE TABLE prix_goncourt.EDITOR(
-   editor VARCHAR(20) NOT NULL,
-   editor_id INT NOT NULL PRIMARY KEY,
-   PRIMARY KEY(editor, editor_id)
-   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-   -- --------------------------------------------------------
--- Table `EDITE`
--- --------------------------------------------------------
-
-CREATE TABLE prix_goncourt.EDITE(
-   book_id INT NOT NULL,
-   editor_id INT NOT NULL
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
    -- --------------------------------------------------------
