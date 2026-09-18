@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS `TO_BE_MEMBER_OF`;
 DROP TABLE IF EXISTS `CREATING`;
+DROP TABLE IF EXISTS `EDITE`;
+DROP TABLE IF EXISTS `EDITOR`;
 DROP TABLE IF EXISTS `VOTE`;
 DROP TABLE IF EXISTS `BOOK`;
 DROP TABLE IF EXISTS `LITERARY_PRIZE`;
@@ -24,7 +26,6 @@ CREATE TABLE prix_goncourt.PERSON(
 
 CREATE TABLE prix_goncourt.JURY_MEMBER(
    person_id INT NOT NULL,
-   chairman BOOLEAN NOT NULL,
    member_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    CONSTRAINT fk_person_jury FOREIGN KEY (person_id) REFERENCES PERSON(person_id) ON DELETE CASCADE
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -55,7 +56,7 @@ CREATE TABLE prix_goncourt.CHARACTER_BOOK(
 CREATE TABLE prix_goncourt.SELECTION(
    selection_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    selection_number TINYINT NOT NULL,
-   date_selection datetime NOT NULL
+   date_selection date NOT NULL,
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -72,17 +73,42 @@ CREATE TABLE prix_goncourt.LITERARY_PRIZE(
 -- Table `BOOK`
 -- --------------------------------------------------------
 
+-- j'ai volontairement pas mis de colonnes année car on a 2 solutions qui sont aussi efficace sans devoir en créé
+-- si on a peu de donnée, juste  year(release_book) si c'est realease_book qu'on veut pour avoir l'année
+-- ou sinon faire realease_book >= 'a-01-01' AND realease_date <= 'a-12-31' ou a est l'année et si
+-- il y a beaucoup de données. dans des cas assez spécifiques, on peut toujours créé
+-- une colonne virtuelle avec mariadb, ce genre de cas est pour des dizaines ou
+-- des centaines de millions de lignes et encore, fautdrait demander avec des group by.
+
 CREATE TABLE prix_goncourt.BOOK(
    author_id INT NOT NULL,
    book_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
    title VARCHAR(200) NOT NULL,
-   editor VARCHAR(20) NOT NULL,
    summarize BLOB,
-   release_book datetime NOT NULL,
+   release_book date NOT NULL,
    number_page INT NOT NULL,
    price DECIMAL(6,2),
    ISBN VARCHAR(20) NOT NULL UNIQUE,
    CONSTRAINT fk_author_book FOREIGN KEY (author_id) REFERENCES AUTHOR(author_id) ON DELETE CASCADE
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+     -- --------------------------------------------------------
+-- Table `EDITOR`
+-- --------------------------------------------------------
+
+CREATE TABLE prix_goncourt.EDITOR(
+   editor VARCHAR(20) NOT NULL,
+   editor_id INT NOT NULL PRIMARY KEY,
+   PRIMARY KEY(editor, editor_id)
+   )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+   -- --------------------------------------------------------
+-- Table `EDITE`
+-- --------------------------------------------------------
+
+CREATE TABLE prix_goncourt.EDITE(
+   book_id INT NOT NULL,
+   editor_id INT NOT NULL
    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
    -- --------------------------------------------------------
@@ -116,6 +142,7 @@ CREATE TABLE prix_goncourt.CREATING(
 
 CREATE TABLE prix_goncourt.TO_BE_MEMBER_OF(
    member_id INT NOT NULL,
+   chairman BOOLEAN NOT NULL,
    prize_id INT NOT NULL,
    CONSTRAINT fk_prize_to_be_member_of FOREIGN KEY (prize_id) REFERENCES LITERARY_PRIZE(prize_id) ON DELETE CASCADE,
    CONSTRAINT fk_member_to_be_member_of FOREIGN KEY (member_id) REFERENCES JURY_MEMBER(member_id) ON DELETE CASCADE
