@@ -35,10 +35,12 @@ class Book:
 
     @override
     def __str__(self) -> str:
-        return f"""le livre {self.title} édité par l'édition {self.editor} écrit par {self.author_book} paru le 
-{self.release_book}. Il a comme numéro ISBN: {self.ISBN} et fait {self.number_page} pages. Ses personnages principaux 
-sont {"- \n".join(map(str, self.list_main_character))}. voici son résumé: \n {self.summarize}. son prix est de 
-{self.price}"""
+        message = f"le livre {self.title} édité par l'édition {self.editor} écrit par {self.author_book} paru le "
+        message = message + f"{self.release_book}. Il a comme numéro ISBN: {self.ISBN} et fait {self.number_page}"
+        message = message + f" pages. Ses personnages principaux sont {"- \n".join(map(str, self.list_main_character))}"
+        message = message + f"{f". voici son résumé: \n {self.summarize}" if self.summarize is not None else ""}"
+        message = message + f". son prix est de {self.price}"
+        return message
 
     def add_list_character(self, jury: Character) -> None:
         self.list_main_character.append(jury)
